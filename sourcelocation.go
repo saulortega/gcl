@@ -11,6 +11,17 @@ type SourceLocation struct {
 	Function string `json:"function,omitempty"`
 }
 
+// OmitSourceLocation omits the source location trace.
+func OmitSourceLocation() *Entry {
+	return &Entry{}
+}
+
+// OmitSourceLocation omits the source location trace.
+func (e *Entry) OmitSourceLocation() *Entry {
+	e.SourceLocation = nil
+	return e
+}
+
 // setSourceLocation sets the source location where the first method is called from.
 func (e *Entry) setSourceLocation() {
 	pc, file, line, ok := runtime.Caller(2)

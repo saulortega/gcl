@@ -7,11 +7,12 @@ import (
 
 type Entry struct {
 	Message        string            `json:"message"`
-	CauseErr       error             `json:"error,omitempty"`
+	CauseErr       string            `json:"error,omitempty"`
 	Severity       string            `json:"severity,omitempty"`
 	Request        *Request          `json:"httpRequest,omitempty"`
 	Labels         map[string]string `json:"logging.googleapis.com/labels,omitempty"`
 	SourceLocation *SourceLocation   `json:"logging.googleapis.com/sourceLocation,omitempty"`
+	causeErr       error
 	fields         map[string]interface{}
 }
 
@@ -25,8 +26,8 @@ func (e Entry) String() string {
 	out, err := json.Marshal(e)
 	if err != nil {
 		fmt.Printf("json.Marshal: %v\n", err)
-		if e.CauseErr != nil {
-			fmt.Println(e.CauseErr)
+		if e.causeErr != nil {
+			fmt.Println(e.causeErr)
 		}
 		if e.Message != "" {
 			fmt.Println(e.Message)

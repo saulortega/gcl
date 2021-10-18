@@ -3,7 +3,6 @@ package gcl
 import (
 	"errors"
 	"fmt"
-	"net/http"
 	"strings"
 )
 
@@ -12,8 +11,8 @@ type Err struct {
 }
 
 // Err returns a standard error interface from the Entry.
-func (e *Entry) Err() *Err {
-	return &Err{e}
+func (e *Entry) Err() Err {
+	return Err{e}
 }
 
 // Error returns the json-structured error compatible with Google Logging.
@@ -27,26 +26,25 @@ func (e *Err) Log() {
 }
 
 func (e Err) Is(target error) bool {
-	return errors.Is(e.entry.CauseErr, target)
+	return errors.Is(e.entry.causeErr, target)
 }
 
 func (e Err) As(target interface{}) bool {
-	return errors.As(e.entry.CauseErr, target)
+	return errors.As(e.entry.causeErr, target)
 }
 
 func (e Err) Unwrap() error {
-	return e.entry.CauseErr
+	return e.entry.causeErr
 }
 
-// HTTPRequest sets the HTTP Request related to the entry.
-func (e *Err) HTTPRequest(r *http.Request) {
-	e.entry.HTTPRequest(r)
+func (e Err) Entry() *Entry {
+	return e.entry
 }
 
 // HTTPStatus returns the setted HTTP Status Code or 500 if not setted.
 func (e *Err) HTTPStatus() int {
 	if e.entry.Request == nil {
-		return 0
+		return 500
 	}
 
 	if e.entry.Request.Status <= 0 {
