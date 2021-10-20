@@ -12,6 +12,7 @@ type Entry struct {
 	Request        *Request          `json:"httpRequest,omitempty"`
 	Labels         map[string]string `json:"logging.googleapis.com/labels,omitempty"`
 	SourceLocation *SourceLocation   `json:"logging.googleapis.com/sourceLocation,omitempty"`
+	TraceLog       string            `json:"logging.googleapis.com/trace,omitempty"`
 	causeErr       error
 	fields         map[string]interface{}
 }
